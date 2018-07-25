@@ -1,4 +1,4 @@
-# Steps
+## Steps
 
 1. Follow installation here https://github.com/tensorflow/models/blob/4f32535fe7040bb1e429ad0e3c948a492a89482d/research/object_detection/g3doc/installation.md to get object_detection ready. If you are facing issues with conflicting python versions, please set up a virtualenv for python2.7 
 
@@ -27,3 +27,10 @@ python google_images_download.py  -k OBJECT_KEYWORD -l NUMBER_OF_IMAGES -f jpg -
 -f : file extension  
 -k : keyword for the image  
 -l : number of images  
+
+## Moving forward
+To run the training locally: https://github.com/tensorflow/models/blob/4f32535fe7040bb1e429ad0e3c948a492a89482d/research/object_detection/g3doc/running_locally.md  
+
+models can be found in tensorflow model zoo: https://github.com/tensorflow/models/blob/master/research/deeplab/g3doc/model_zoo.md  
+
+model pipeline configs can be found in:  https://github.com/tensorflow/models/tree/4f32535fe7040bb1e429ad0e3c948a492a89482d/research/object_detection/samples/configs
