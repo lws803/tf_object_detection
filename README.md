@@ -1,4 +1,4 @@
-#Steps
+# Steps
 
 1. Follow installation here https://github.com/tensorflow/models/blob/4f32535fe7040bb1e429ad0e3c948a492a89482d/research/object_detection/g3doc/installation.md to get object_detection ready. If you are facing issues with conflicting python versions, please set up a virtualenv for python2.7 
 
