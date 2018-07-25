@@ -10,12 +10,12 @@
 
 5. Use xml_to_csv.py to generate the csv file required for generating tf record 
 ```shell
-function () { return "python xml_to_csv.py -in TRAINING_ANNOTATION_FOLDER_PATH -out train.csv"}
+python xml_to_csv.py -in TRAINING_ANNOTATION_FOLDER_PATH -out train.csv
 ```
 7. Edit generate_tfrecord.py to generate the tf record see line ~25
 8. Use it to generate the tfrecord 
 ```shell
-function () { return "python generate_tfrecord.py --input_csv=PATH_TO_CSV  --output_tfrecord=train.record"}
+python generate_tfrecord.py --input_csv=PATH_TO_CSV  --output_tfrecord=train.record
 ```
 9. Repeat steps 3 to 9 for eval and test categories of your dataset
 
