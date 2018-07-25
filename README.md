@@ -19,3 +19,11 @@ python generate_tfrecord.py --input_csv=PATH_TO_CSV  --output_tfrecord=train.rec
 ```
 9. Repeat steps 3 to 9 for eval and test categories of your dataset
 
+## Misc 
+To download images with the included script:  
+```shell
+python google_images_download.py  -k OBJECT_KEYWORD -l NUMBER_OF_IMAGES -f jpg -s medium -o OUTPUT_FOLDER
+```
+-f : file extension  
+-k : keyword for the image  
+-l : number of images  
