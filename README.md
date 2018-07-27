@@ -34,3 +34,11 @@ To run the training locally: https://github.com/tensorflow/models/blob/4f32535fe
 models can be found in tensorflow model zoo: https://github.com/tensorflow/models/blob/master/research/deeplab/g3doc/model_zoo.md  
 
 model pipeline configs can be found in:  https://github.com/tensorflow/models/tree/4f32535fe7040bb1e429ad0e3c948a492a89482d/research/object_detection/samples/configs
+
+
+## Some helpful resources
+
+1. Understanding different kinds of models for detection: https://medium.com/@jonathan_hui/what-do-we-learn-from-region-based-object-detectors-faster-r-cnn-r-fcn-fpn-7e354377a7c9
+2. Types of optimizers: http://ruder.io/optimizing-gradient-descent/
+3. SSD(Single shot detectors) paper: https://arxiv.org/abs/1512.02325
+4. Understanding mAPs (mean average precision): https://stackoverflow.com/questions/46094282/why-we-use-map-score-for-evaluate-object-detectors-in-deep-learning
