@@ -42,3 +42,4 @@ model pipeline configs can be found in:  https://github.com/tensorflow/models/tr
 2. Types of optimizers: http://ruder.io/optimizing-gradient-descent/
 3. SSD(Single shot detectors) paper: https://arxiv.org/abs/1512.02325
 4. Understanding mAPs (mean average precision): https://stackoverflow.com/questions/46094282/why-we-use-map-score-for-evaluate-object-detectors-in-deep-learning
+5. Use the model with opencv for detection: https://github.com/opencv/opencv/wiki/TensorFlow-Object-Detection-API 
