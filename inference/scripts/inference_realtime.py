@@ -65,13 +65,10 @@ config = tf.ConfigProto()
 config.gpu_options.per_process_gpu_memory_fraction = GPU_FRACTION
 
 
-
-
 class pipeline:
-    def __init__ (self, img):
+    def __init__ (self, img, sess):
         self.image = img
-        self.sess = tf.Session(graph=detection_graph,config=config)
-
+        self.sess = sess
 
 
     def preprocess(self):
@@ -134,27 +131,29 @@ class pipeline:
 if __name__ == '__main__':
     
     cap = cv2.VideoCapture(0)
+    currSess = None
+    with tf.Session(graph=detection_graph, config=config) as sess:
 
-    while(True):
-        ret, frame = cap.read()
+        while(True):
+            ret, frame = cap.read()
 
-        # initialize
-        frame_size = frame.shape
-        frame_width  = frame_size[1]
-        frame_height = frame_size[0]
+            # initialize
+            frame_size = frame.shape
+            frame_width  = frame_size[1]
+            frame_height = frame_size[0]
 
-        frame = cv2.resize(frame, (0,0), fx=0.3, fy=0.3) # Scale resizing
+            frame = cv2.resize(frame, (0,0), fx=0.3, fy=0.3) # Scale resizing
 
-        my_pipeline = pipeline(frame)
-        visualisation = my_pipeline.visualisation()
+            my_pipeline = pipeline(frame, sess)
+            visualisation = my_pipeline.visualisation()
 
-        numpy_horizontal_concat = np.concatenate((frame, visualisation), 1)
+            numpy_horizontal_concat = np.concatenate((frame, visualisation), 1)
 
-        cv2.imshow('image', numpy_horizontal_concat)
+            cv2.imshow('image', numpy_horizontal_concat)
 
-        cv2.waitKey(1)
-        # exit if the key "q" is pressed
-        if cv2.waitKey(1) & 0xFF == ord('q'):
-            break
+            cv2.waitKey(1)
+            # exit if the key "q" is pressed
+            if cv2.waitKey(1) & 0xFF == ord('q'):
+                break
 
     cv2.destroyAllWindows()
