@@ -12,6 +12,13 @@ except ImportError:
     print("  sudo pip install tensorflow")
     sys.exit(1)
 
+# Dont forget to: 
+# From tensorflow/models/research/
+# protoc object_detection/protos/*.proto --python_out=.
+# and 
+# From tensorflow/models/research/
+# export PYTHONPATH=$PYTHONPATH:`pwd`:`pwd`/slim
+
 import object_detection
 from object_detection.utils import label_map_util
 from object_detection.utils import visualization_utils as vis_util
