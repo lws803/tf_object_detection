@@ -12,13 +12,6 @@ except ImportError:
     print("  sudo pip install tensorflow")
     sys.exit(1)
 
-# Dont forget to: 
-# From tensorflow/models/research/
-# protoc object_detection/protos/*.proto --python_out=.
-# and 
-# From tensorflow/models/research/
-# export PYTHONPATH=$PYTHONPATH:`pwd`:`pwd`/slim
-
 
 import object_detection
 from object_detection.utils import label_map_util
@@ -68,7 +61,7 @@ config.gpu_options.per_process_gpu_memory_fraction = GPU_FRACTION
 
 
 
-class pipeline:
+class Pipeline:
     def __init__ (self, img):
         self.image = img
         self.sess = tf.Session(graph=detection_graph,config=config)
@@ -147,7 +140,7 @@ if __name__ == '__main__':
 
         frame = cv2.resize(frame, (0,0), fx=0.3, fy=0.3) # Scale resizing
 
-        my_pipeline = pipeline(frame)
+        my_pipeline = Pipeline(frame)
         visualisation = my_pipeline.visualisation()
 
         numpy_horizontal_concat = np.concatenate((frame, visualisation), 1)
