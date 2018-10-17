@@ -28,10 +28,11 @@ $ python inference_realtime.py # For realtime detection via webcam
 $ python inference_single.py PATH/TO/IMAGE # For single image detection
 ```
 
-### 3. Changing models and labels
+### 3. Changing/ Adding your model and labels
 1. Head to /inference/data/models
 2. Head to https://www.google.com.sg/search?q=tensorflow+model+zoo&oq=tensorflow+model+zoo+&aqs=chrome..69i57j0l5.2558j0j7&sourceid=chrome&ie=UTF-8 and download a model of your choice
-3. Edit MODEL_NAME in ```/inference/scripts/inference_realtime.py``` and change label map *(if needed)* for LABEL_NAME. Default model is ```ssdlite_mobilenet_v2_coco_2018_05_09``` with label = ```mscoco_label_map.pbtxt```
+3. Extract the model of your choice and leave it as ```/inference/data/model/ssdlite_mobilenet_v2_coco_2018_05_09/...``` *for example*
+4. Edit MODEL_NAME in ```/inference/scripts/inference_realtime.py``` and change label map *(if needed)* for LABEL_NAME. Default model is ```ssdlite_mobilenet_v2_coco_2018_05_09``` with label = ```mscoco_label_map.pbtxt```
 
 
 ### 4. Editing Pipeline class
