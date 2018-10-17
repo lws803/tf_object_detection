@@ -25,7 +25,7 @@ from object_detection.utils import visualization_utils as vis_util
 GPU_FRACTION = 0.4
 
 ######### Set model here ############
-MODEL_NAME =  'ssdlite_mobilenet_v2_coco_2018_05_09'
+MODEL_NAME =  'ssd_mobilenet_v1_0.75_depth_300x300_coco14_sync_2018_07_03'
 # By default models are stored in data/models/
 MODEL_PATH = os.path.join(os.path.dirname(sys.path[0]),'data','models' , MODEL_NAME)
 # Path to frozen detection graph. This is the actual model that is used for the object detection.
@@ -104,7 +104,7 @@ class Pipeline:
 
         object_count=1
         
-        print (objects)
+        #print (objects)
 
         for i in range(len(objects)):
             object_count+=1
