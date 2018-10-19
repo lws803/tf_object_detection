@@ -4,6 +4,11 @@ import math
 import io
 import sys
 import os
+import rospy
+from std_msgs.msg import String , Header
+from sensor_msgs.msg import Image
+from cv_bridge import CvBridge, CvBridgeError
+
 try:
     import tensorflow as tf
 except ImportError:
@@ -55,22 +60,24 @@ config.gpu_options.per_process_gpu_memory_fraction = GPU_FRACTION
 
 
 class Pipeline:
-    def __init__ (self, img, sess):
-        self.image = img
-        self.sess = sess
+    def __init__ (self):
+        self.image_pub = rospy.Publisher("debug_image",Image, queue_size=1)
+        self.bridge = CvBridge()
+        self.image_sub = rospy.Subscriber("/asv/camera2/image_color", Image, self.image_cb, queue_size=1, buff_size=2**24)
+        self.sess = tf.Session(graph=detection_graph,config=config)
 
 
-    def preprocess(self):
-        # # Chaining the preprocessors
-        # self.img = cv2.GaussianBlur(self.img,(5,5),0)
-        # self.img = norm_illum_color(self.img, 0.8)
-        pass
-
-    def process (self):
+    def image_cb (self):
         objArray = []
         # objArray = Detection2DArray()
+        try:
+            cv_image = self.bridge.imgmsg_to_cv2(data, "bgr8")
+        except CvBridgeError as e:
+            print(e)
 
-        image=cv2.cvtColor(self.image, cv2.COLOR_BGR2RGB)
+        image=cv2.cvtColor(cv_image, cv2.COLOR_BGR2RGB)
+        image = cv2.resize(image, (0,0), fx=0.3, fy=0.3)
+
 
         # the array based representation of the image will be used later in order to prepare the
         # result image with boxes and labels on it.
@@ -107,42 +114,21 @@ class Pipeline:
 
         img = cv2.cvtColor(image_np, cv2.COLOR_BGR2RGB)
 
-        return img
-
-
-    def visualisation(self):
-
-        img = self.process()
-        return img
+        self.image_pub.publish(img)
 
 
 # main
 if __name__ == '__main__':
-    
-    cap = cv2.VideoCapture(0)
-    currSess = None
-    with tf.Session(graph=detection_graph, config=config) as sess:
+    rospy.init_node('detector_node')
 
-        while(True):
-            ret, frame = cap.read()
+    obj=Pipeline()
 
-            # initialize
-            frame_size = frame.shape
-            frame_width  = frame_size[1]
-            frame_height = frame_size[0]
+    try:
+        rospy.spin()
+    except KeyboardInterrupt:
+        print("ShutDown")
+    cv2.destroyAllWindows()
 
-            frame = cv2.resize(frame, (0,0), fx=0.3, fy=0.3) # Scale resizing
 
-            my_pipeline = Pipeline(frame, sess)
-            visualisation = my_pipeline.visualisation()
-
-            numpy_horizontal_concat = np.concatenate((frame, visualisation), 1)
-
-            cv2.imshow('image', numpy_horizontal_concat)
-
-            cv2.waitKey(1)
-            # exit if the key "q" is pressed
-            if cv2.waitKey(1) & 0xFF == ord('q'):
-                break
 
     cv2.destroyAllWindows()
