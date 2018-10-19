@@ -23,10 +23,10 @@ from object_detection.utils import label_map_util
 from object_detection.utils import visualization_utils as vis_util
 
 # SET FRACTION OF GPU YOU WANT TO USE HERE
-GPU_FRACTION = 0.4
+GPU_FRACTION = 0.8
 
 ######### Set model here ############
-MODEL_NAME =  'ssd_mobilenet_v1_0.75_depth_300x300_coco14_sync_2018_07_03'
+MODEL_NAME =  'ssdlite_mobilenet_v2_coco_2018_05_09'
 # By default models are stored in data/models/
 MODEL_PATH = os.path.join(os.path.dirname(sys.path[0]),'data','models' , MODEL_NAME)
 # Path to frozen detection graph. This is the actual model that is used for the object detection.
@@ -60,14 +60,14 @@ config.gpu_options.per_process_gpu_memory_fraction = GPU_FRACTION
 
 
 class Pipeline:
-    def __init__ (self):
+    def __init__ (self, sess):
+        self.sess = sess
         self.image_pub = rospy.Publisher("debug_image",Image, queue_size=1)
         self.bridge = CvBridge()
         self.image_sub = rospy.Subscriber("/asv/camera2/image_color", Image, self.image_cb, queue_size=1, buff_size=2**24)
-        self.sess = tf.Session(graph=detection_graph,config=config)
 
 
-    def image_cb (self):
+    def image_cb (self, data):
         objArray = []
         # objArray = Detection2DArray()
         try:
@@ -76,7 +76,7 @@ class Pipeline:
             print(e)
 
         image=cv2.cvtColor(cv_image, cv2.COLOR_BGR2RGB)
-        image = cv2.resize(image, (0,0), fx=0.3, fy=0.3)
+        image = cv2.resize(image, (0,0), fx=0.6, fy=0.6)
 
 
         # the array based representation of the image will be used later in order to prepare the
@@ -114,20 +114,26 @@ class Pipeline:
 
         img = cv2.cvtColor(image_np, cv2.COLOR_BGR2RGB)
 
-        self.image_pub.publish(img)
+        image_out = Image()
+        try:
+            image_out = self.bridge.cv2_to_imgmsg(img,"bgr8")
+        except CvBridgeError as e:
+            print(e)
+        image_out.header = data.header
+        self.image_pub.publish(image_out)
 
 
 # main
 if __name__ == '__main__':
     rospy.init_node('detector_node')
 
-    obj=Pipeline()
-
-    try:
-        rospy.spin()
-    except KeyboardInterrupt:
-        print("ShutDown")
-    cv2.destroyAllWindows()
+    with tf.Session(graph=detection_graph, config=config) as sess:
+        obj=Pipeline(sess)
+        try:
+            rospy.spin()
+        except KeyboardInterrupt:
+            print("ShutDown")
+        cv2.destroyAllWindows()
 
 
 
