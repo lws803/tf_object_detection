@@ -4,25 +4,25 @@
 
 2. Download your images and store them in a folder 
 
-3. Seperate your images into training, eval, test categories
+3. Seperate your images into training, eval, test categories (60% training, 20% validation, 20% test)
 
 4. Use labelimg tool to label the images and save them in an annotations folder
 
 5. Use xml_to_csv.py to generate the csv file required for generating tf record 
 ```shell
-python xml_to_csv.py -in TRAINING_ANNOTATION_FOLDER_PATH -out train.csv
+$ python xml_to_csv.py -in TRAINING_ANNOTATION_FOLDER_PATH -out train.csv
 ```
-7. Edit generate_tfrecord.py to generate the tf record see line ~25
+7. Edit generate_tfrecord.py to add your classes see line ~25 
 8. Use it to generate the tfrecord 
 ```shell
-python generate_tfrecord.py --input_csv=PATH_TO_CSV  --output_tfrecord=train.record
+$ python generate_tfrecord.py --input_csv=PATH_TO_CSV  --output_tfrecord=train.record
 ```
-9. Repeat steps 3 to 9 for eval and test categories of your dataset
+9. Repeat steps 3 to 9 if you have more datasets
 
 ## Misc 
 To download images with the included script:  
 ```shell
-python google_images_download.py  -k OBJECT_KEYWORD -l NUMBER_OF_IMAGES -f jpg -s medium -o OUTPUT_FOLDER
+$ python google_images_download.py  -k OBJECT_KEYWORD -l NUMBER_OF_IMAGES -f jpg -s medium -o OUTPUT_FOLDER
 ```
 -f : file extension  
 -k : keyword for the image  
@@ -43,3 +43,24 @@ model pipeline configs can be found in:  https://github.com/tensorflow/models/tr
 3. SSD(Single shot detectors) paper: https://arxiv.org/abs/1512.02325
 4. Understanding mAPs (mean average precision): https://stackoverflow.com/questions/46094282/why-we-use-map-score-for-evaluate-object-detectors-in-deep-learning
 5. Use the model with opencv for detection: https://github.com/opencv/opencv/wiki/TensorFlow-Object-Detection-API 
+
+## Extract images from ROS
+### Steps
+1. Make sure roscore is running
+```shell
+$ roscore
+```
+2. Run image transport republisher to convert compressed image to Image
+```shell
+$ rosrun image_transport republish compressed in:=<IMAGETOPICINBAGFILE> raw out:=image/raw
+```
+3. Run image extractor
+```shell
+$ rosrun image_view extract_images image:=image/raw _filename_format:=frame%04d.jpg _sec_per_frame:=1
+```
+
+4. Play the bagfile to begin extraction
+```shell
+$ rosbag play <bagfile>
+```
+
